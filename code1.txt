@@ -1,0 +1,5 @@
+#!/bin/bash  
+
+
+echo  "Hello world this is Bash Scripting ";
+echo   8000000000000;
