@@ -1,0 +1,114 @@
+
+PRe: 
+
+1.  Setup  Hostname and LocalDNS(Optional) for Kubernetes   on  All the nodes
+
+2.  turn off swap memory for kubernetes installation 
+
+3.  for installation (only) turn off selinux 
+
+
+###############
+   1  cat  /etc/os-release
+    2  swapoff -a
+    3  vim /etc/fstab
+    4  vi  /etc/fstab
+    5  free  -m
+    6  getenforce
+    7  setenforce  0
+    8  systemctl enable --now firewalld
+    9  firewall-cmd --add-port=0-65535/tcp --permanent
+   10  firewall-cmd --add-port=0-65535/udp --permanent
+   11  firewall-cmd  --reload
+   12   systemctl enable --now firewalld
+   13  modprobe br_netfilter
+   14  echo net.bridge.bridge-nf-call-ip6tables = 1 >>/etc/sysctl.conf
+   15  echo net.bridge.bridge-nf-call-iptables = 1 >>/etc/sysctl.conf
+   16  yum  install docker kubeadm -y
+   17  cd /etc/yum.repos.d/
+   18  ls
+   19  vi kube.repo
+   20  scp kube.repo  station165.example.com:/etc/yum.repos.d/
+   21  scp kube.repo  192.168.10.165:/etc/yum.repos.d/
+   22  scp kube.repo  192.168.10.164:/etc/yum.repos.d/
+   23  cd
+   24  yum install net-tools vim bash-completion kubelet kubectl kubeadm docker -y
+   25  systemctl  start  docker
+   26  systemctl  enable  docker  kubelet
+   27  kubeadm  init  --pod-network-cidr=172.24.0.0/16
+   28  ping www.google.com
+   29  vim /etc/resolv.conf
+   30  ping www.google.com
+   31  kubeadm  init  --pod-network-cidr=172.24.0.0/16
+   32  mkdir /root/.kube
+   33  cp  -vp  /etc/kubernetes/admin.conf  /root/.kube/config
+   34  kubectl create -f http://192.168.10.254/kubernetes/kube-flannel.yml
+
+
+
+
+@@@@@@@@@@@@@@@@@ TO join  worker or Minion@@@@@@@@@@
+
+ kubeadm join 192.168.10.250:6443 --token hro5ym.78u53ksf8da7z2jg --discovery-token-ca-cert-hash sha256:67a4dca05610ff95f7d64ee0f33984eab8b7af6c060259ea49e27d5eae21f681
+
+
+
+
+
+
+##############  PODs and Deployments  #################
+
+  96  cat newapp.yml
+   97  kubectl get pods
+   98  kubectl delete  pods appsec
+   99  kubectl delete  pods appfirst
+  100  kubectl get pods
+  101  kubectl  get  pods
+  102  vi  /root/.bashrc
+  103  source   /root/.bashrc
+  104  cat  /root/.bashrc
+  105  kubectl  get  pods
+  106  kubectl  get  deployments
+  107  kubectl  create  deployment  htmlapp  --image=nginx
+  108  kubectl get deployments
+  109  kubectl get  pods
+  110  kubectl get deployments
+  111  kubectl get deployments   htmlapp
+  112  kubectl get deployments   htmlapp  -o yaml
+  113  kubectl get deployments   htmlapp  -o json
+  114  kubectl get deployments   htmlapp  --export  -o  yaml  >testdep.yml
+  115  vi testdep.yml
+  116  history
+ kubectl scale  deployments  htmlapp  --replicas=5
+
+@@@@@@@@@@@@  service , auto scalling @@@@@@@@@@@@@
+
+
+ 41  kubectl expose deployment phpapp --port=80  --type=sdgfdhd
+   42  kubectl expose deployment phpapp --port=80  --type=NodePort
+   43  kubectl get  svc
+   44  kubectl get  svc   phpapp   --export  -o  yaml
+   45  kubectl get  svc   phpapp   --export  -o  yaml   >phpservice.yml
+   46  kubectl get svc
+   47  kubectl  get nodes
+   48  curl  http://station40.example.com:31567
+   49   http://station41.example.com:31567
+   50  curl  http://station41.example.com:31567
+   51  iptables -FD
+   52  iptables -F
+   53  curl  http://station39.example.com:31567
+   54  kubectl get pods
+   55  kubectl get deployments.
+   56  kubectl  scale  deployment  phpapp  --replicas=4
+   57  kubectl get deployments.
+   58  kubectl get pods
+   59  kubectl get deployments.
+   60  kubectl get pods
+   61  kubectl get pods  -o wide
+   62  kubectl get deployments
+   63  kubectl  autoscale deployment phpapp --max=30 --min=2  --cpu-percent=80
+   64  kubectl get deployments.
+   65  history
+
+#############
+
